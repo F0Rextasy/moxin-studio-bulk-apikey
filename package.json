@@ -1,0 +1,33 @@
+{
+  "name": "www-moxin-studio-bulk-apikey",
+  "version": "1.0.0",
+  "description": "Bulk-create Moxin Studio (new-api) accounts and keys — OpenAI-compatible inference on https://www.moxin.studio/v1, funded by the panel's daily check-in.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "www-moxin-studio-bulk-apikey": "src/cli.js",
+    "www-moxin-studio-bulk-apikey-launcher": "src/launcher.js"
+  },
+  "main": "src/cli.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/launcher.js",
+    "mint": "node src/cli.js",
+    "9router": "node src/connect-9router.js"
+  },
+  "keywords": [
+    "api-key",
+    "bulk",
+    "register",
+    "launcher",
+    "www-moxin-studio",
+    "apikey"
+  ],
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
+}
