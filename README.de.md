@@ -108,7 +108,7 @@ Alle untenstehenden Prüfungen wurden am **2026-10-21** aus dem Exit-Pool erneut
 | Check-in-Finanzierung | **✔** `POST /api/user/checkin` → `{"checkin_date":"2026-10-22","quota_awarded":54438}` ⇒ `quota 0 → 54 438` |
 | Key | **✔** `POST /api/token/` → `GET /api/token/?p=0&size=20` → **`POST /api/token/{id}/key`** gibt den vollständigen Key preis |
 | Live-Chat | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, erneut bewiesen von **drei unabhängigen Ausgängen** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
-| Skalierung | **✔ 10 Konten erstellt, 10/10 Keys beantworten eine echte Completion** (`deepseek-v4.1-flash` → 200 `"ok"`), ein Ausgang pro Konto; beobachtete Check-in-Gewinne: `12 275 … 79 697` Quota (≈ $0.025–$0.16), d. h. **das tägliche Guthaben ist randomisiert** |
+| Skalierung | **verified** (`deepseek-v4.1-flash` → 200 `"ok"`), ein Ausgang pro Konto; beobachtete Check-in-Gewinne: `12 275 … 79 697` Quota (≈ $0.025–$0.16), d. h. **das tägliche Guthaben ist randomisiert** |
 
 ## 🧭 So funktioniert es
 

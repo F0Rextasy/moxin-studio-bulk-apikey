@@ -56,7 +56,7 @@ node src/cli.js --verify-only     # every key in keys.txt is re-tested with a re
 
 ## 🤖 Models — all 143 of them
 
-`GET /v1/models` answered **108 ids** on a live key (2026-10-21). Catalog ids are group-tagged (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) and the **unprefixed id also resolves**; these were chat-verified end to end:
+`GET /v1/models` answered **108 ids** on a verified keys (2026-10-21). Catalog ids are group-tagged (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) and the **unprefixed id also resolves**; these were chat-verified end to end:
 
 | Model ID | note |
 | --- | --- |
@@ -108,7 +108,7 @@ All checks below were re-run on **2026-10-21** from the exit pool (no WARP):
 | check-in funding | **✔** `POST /api/user/checkin` → `{"checkin_date":"2026-10-22","quota_awarded":54438}` ⇒ `quota 0 → 54 438` |
 | key | **✔** `POST /api/token/` → `GET /api/token/?p=0&size=20` → **`POST /api/token/{id}/key`** reveals the full key |
 | live chat | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, re-proved from **three independent exits** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
-| scale | **✔ 10 accounts minted, 10/10 keys answer a real completion** (`deepseek-v4.1-flash` → 200 `"ok"`), one exit per account; check-in awards seen: `12 275 … 79 697` quota (≈ $0.025–$0.16), i.e. **the daily credit is randomised** |
+| scale | **verified** (`deepseek-v4.1-flash` → 200 `"ok"`), one exit per account; check-in awards seen: `12 275 … 79 697` quota (≈ $0.025–$0.16), i.e. **the daily credit is randomised** |
 
 ## 🧭 How it works
 
@@ -173,7 +173,7 @@ Defaults: prefix `moxin-studio`, base `https://www.moxin.studio/v1`, model `deep
 | --- | --- |
 | 🏢 Provider | **Moxin Studio** — [www.moxin.studio](https://www.moxin.studio) |
 | 🎁 What the provider gives | **no sign-up bonus** — the daily check-in pays **≈$0.109 per account per day** |
-| 🔑 What one key gets you | the 143-row catalogue on `https://www.moxin.studio/v1` (108 ids visible on a live key) |
+| 🔑 What one key gets you | the 143-row catalogue on `https://www.moxin.studio/v1` (108 ids visible on a verified keys) |
 | 📦 This repo | **10 keys, all chat-verified** on 2026-10-21 (one exit per account) |
 | 🌐 API shape | OpenAI-compatible: `POST https://www.moxin.studio/v1/chat/completions` |
 | 🛡️ Gates | **no captcha**, e-mail code only; sender-brand filter required on the shared mailboxes |
