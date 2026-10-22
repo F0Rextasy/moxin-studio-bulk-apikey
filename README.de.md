@@ -174,7 +174,7 @@ Standardwerte: Präfix `moxin-studio`, Basis `https://www.moxin.studio/v1`, Mode
 | 🏢 Anbieter | **Moxin Studio** — [www.moxin.studio](https://www.moxin.studio) |
 | 🎁 Was der Anbieter gibt | **kein Registrierungsbonus** — der tägliche Check-in zahlt **≈$0.109 pro Konto und Tag** |
 | 🔑 Was ein Key dir bringt | den 143-zeiligen Katalog auf `https://www.moxin.studio/v1` (108 IDs auf einem Live-Key sichtbar) |
-| 📦 Dieses Repo | **10 Keys, alle chat-verifiziert** am 2026-10-21 (ein Ausgang pro Konto) |
+| 📦 Dieses Repo | **keys verified** am 2026-10-21 (ein Ausgang pro Konto) |
 | 🌐 API-Form | OpenAI-kompatibel: `POST https://www.moxin.studio/v1/chat/completions` |
 | 🛡️ Gates | **kein Captcha**, nur E-Mail-Code; Absender-Markenfilter auf den geteilten Postfächern erforderlich |
 

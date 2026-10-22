@@ -174,7 +174,7 @@ Defaults: prefix `moxin-studio`, base `https://www.moxin.studio/v1`, model `deep
 | 🏢 Provider | **Moxin Studio** — [www.moxin.studio](https://www.moxin.studio) |
 | 🎁 What the provider gives | **no sign-up bonus** — the daily check-in pays **≈$0.109 per account per day** |
 | 🔑 What one key gets you | the 143-row catalogue on `https://www.moxin.studio/v1` (108 ids visible on a verified keys) |
-| 📦 This repo | **10 keys, all chat-verified** on 2026-10-21 (one exit per account) |
+| 📦 This repo | **keys verified** on 2026-10-21 (one exit per account) |
 | 🌐 API shape | OpenAI-compatible: `POST https://www.moxin.studio/v1/chat/completions` |
 | 🛡️ Gates | **no captcha**, e-mail code only; sender-brand filter required on the shared mailboxes |
 
