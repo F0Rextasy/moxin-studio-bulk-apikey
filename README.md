@@ -100,6 +100,11 @@ No browser, no captcha solver, no npm install. `keys.txt` is written only after 
 
 ## ✅ Verified working — every key is tested
 
+> **Quality gates.** Every key here passed a live `chat-200` before it was written to `keys.txt`
+> (dead keys are never shipped). Router combos follow the same rule at the model level: an entry is
+> added **only if the model answers `chat-200` and can call tools** — a model without tool support,
+> a dead key or a dead provider is dropped instead of added. Works with **9Router and OmniRoute**.
+
 All checks below were re-run on **2026-10-21** from the exit pool (no WARP):
 
 | Check | Result |
@@ -167,7 +172,6 @@ node public-cli.js --connect-9router --router9 http://localhost:20128 --password
 ```
 
 Defaults: prefix `moxin-studio`, base `https://www.moxin.studio/v1`, model `deepseek-v4.1-flash`; models are served as `moxin-studio/<model id>`.
-
 
 ## 🔌 Connect to OmniRoute
 

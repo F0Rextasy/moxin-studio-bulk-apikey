@@ -18,6 +18,7 @@
 [![License](https://img.shields.io/badge/license-MIT-6ea8fe?style=for-the-badge)](LICENSE)
 [![Models](https://img.shields.io/badge/models-143%20served-412991?style=for-the-badge)](https://www.moxin.studio/pricing)
 [![9Router](https://img.shields.io/badge/9Router-connector-8B5CF6?style=for-the-badge)](#-connect-to-9router)
+[![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
 [🛠 Démarrage rapide](#-quick-start) · [🎁 Offre gratuite](#-free-tier--how-much-you-get) · [🤖 Modèles](#-models--all-143-of-them) · [🧪 Utiliser l'API](#-how-to-use-the-api) · [✅ Vérifié](#-verified-working--every-key-is-tested) · [🧭 Comment ça marche](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Options](#️-cli-options) · [🛰️ Proxys](#️-behind-a-proxy) · [🐞 Problèmes](#-issues)
@@ -167,6 +168,15 @@ node public-cli.js --connect-9router --router9 http://localhost:20128 --password
 
 Valeurs par défaut : préfixe `moxin-studio`, base `https://www.moxin.studio/v1`, modèle `deepseek-v4.1-flash` ; les modèles sont servis sous `moxin-studio/<model id>`.
 
+## 🔌 Connexion à OmniRoute
+
+[OmniRoute](https://omniroute.online) est un routeur auto-hébergé compatible OpenAI :
+
+```bash
+node public-cli.js --connect-omniroute --router9 http://localhost:20128 --password 123456
+```
+
+Valeurs par défaut : préfixe `moxin-studio`, base `https://www.moxin.studio/v1`, modèle `deepseek-v4.1-flash` ; les modèles sont servis sous `moxin-studio/<model id>`.
 ## 🔑 Ce qu'une clé vous apporte
 
 | | |
