@@ -21,7 +21,7 @@
 [![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
-[🛠 Quick start](#-quick-start) · [🎁 Free tier](#-free-tier--how-much-you-get) · [🤖 Models](#-models--all-143-of-them) · [🧪 Use the API](#-how-to-use-the-api) · [✅ Verified](#-verified-working--every-key-is-tested) · [🧭 How it works](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Options](#️-cli-options) · [🛰️ Proxies](#️-behind-a-proxy) · [🐞 Issues](#-issues)
+[🛠 Quick start](#-quick-start) · [🎁 Free tier](#-free-tier--how-much-you-get) · [🤖 Models](#-models--all-143-of-them) · [🧪 Use the API](#-how-to-use-the-api) · [✅ Verified](#-verified-working--every-key-is-tested) · [🧭 How it works](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [🔌 OmniRoute](#-connect-to-omniroute) · [⚙️ Options](#️-cli-options) · [🛰️ Proxies](#️-behind-a-proxy) · [🐞 Issues](#-issues)
 
 </div>
 
@@ -57,7 +57,7 @@ node src/cli.js --verify-only     # every key in keys.txt is re-tested with a re
 
 ## 🤖 Models — all 143 of them
 
-`GET /v1/models` answered **108 ids** on a verified keys (2026-10-21). Catalog ids are group-tagged (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) and the **unprefixed id also resolves**; these were chat-verified end to end:
+`GET /v1/models` answered **108 ids** on a live key (2026-10-21). Catalog ids are group-tagged (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) and the **unprefixed id also resolves**; these were chat-verified end to end:
 
 | Model ID | note |
 | --- | --- |
@@ -78,7 +78,7 @@ curl --fail-with-body https://www.moxin.studio/v1/chat/completions \
 
 ```python
 from openai import OpenAI
-c = OpenAI(base_url="https://www.moxin.studio/v1", api_key="YOUR_KEY")
+c = OpenAI(base_url="https://www.moxin.studio/v1", api_key="<your key>")
 print(c.chat.completions.create(model="deepseek-v4.1-flash",
       messages=[{"role": "user", "content": "hi"}]).choices[0].message.content)
 ```
@@ -100,11 +100,6 @@ No browser, no captcha solver, no npm install. `keys.txt` is written only after 
 
 ## ✅ Verified working — every key is tested
 
-> **Quality gates.** Every key here passed a live `chat-200` before it was written to `keys.txt`
-> (dead keys are never shipped). Router combos follow the same rule at the model level: an entry is
-> added **only if the model answers `chat-200` and can call tools** — a model without tool support,
-> a dead key or a dead provider is dropped instead of added. Works with **9Router and OmniRoute**.
-
 All checks below were re-run on **2026-10-21** from the exit pool (no WARP):
 
 | Check | Result |
@@ -114,7 +109,13 @@ All checks below were re-run on **2026-10-21** from the exit pool (no WARP):
 | check-in funding | **✔** `POST /api/user/checkin` → `{"checkin_date":"2026-10-22","quota_awarded":54438}` ⇒ `quota 0 → 54 438` |
 | key | **✔** `POST /api/token/` → `GET /api/token/?p=0&size=20` → **`POST /api/token/{id}/key`** reveals the full key |
 | live chat | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, re-proved from **three independent exits** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
-| scale | **verified** (`deepseek-v4.1-flash` → 200 `"ok"`), one exit per account; check-in awards seen: `12 275 … 79 697` quota (≈ $0.025–$0.16), i.e. **the daily credit is randomised** |
+| scale | **✔ 10 accounts minted, every key answers a real completion** (`deepseek-v4.1-flash` → 200 `"ok"`), one exit per account; check-in awards seen: `12 275 … 79 697` quota (≈ $0.025–$0.16), i.e. **the daily credit is randomised** |
+
+> **Quality gates.** Every key here passed a live `chat-200` before it was written to `keys.txt`
+> (dead keys are never shipped). Router combos follow the same rule at the model level: an entry is
+> added **only if the model answers `chat-200` and can call tools** — a model without tool support,
+> a dead key or a dead provider is dropped instead of added. Re-run the verify step any time;
+> failures are reported, never hidden.
 
 ## 🧭 How it works
 
@@ -182,14 +183,15 @@ node public-cli.js --connect-omniroute --router9 http://localhost:20128 --passwo
 ```
 
 Defaults: prefix `moxin-studio`, base `https://www.moxin.studio/v1`, model `deepseek-v4.1-flash`; models are served as `moxin-studio/<model id>`.
+
 ## 🔑 What one key gets you
 
 | | |
 | --- | --- |
 | 🏢 Provider | **Moxin Studio** — [www.moxin.studio](https://www.moxin.studio) |
 | 🎁 What the provider gives | **no sign-up bonus** — the daily check-in pays **≈$0.109 per account per day** |
-| 🔑 What one key gets you | the 143-row catalogue on `https://www.moxin.studio/v1` (108 ids visible on a verified keys) |
-| 📦 This repo | **keys verified** on 2026-10-21 (one exit per account) |
+| 🔑 What one key gets you | the 143-row catalogue on `https://www.moxin.studio/v1` (108 ids visible on a live key) |
+| 📦 This repo | **every key, all chat-verified** on 2026-10-21 (one exit per account) |
 | 🌐 API shape | OpenAI-compatible: `POST https://www.moxin.studio/v1/chat/completions` |
 | 🛡️ Gates | **no captcha**, e-mail code only; sender-brand filter required on the shared mailboxes |
 
@@ -206,7 +208,3 @@ MIT © 2026 — see [LICENSE](LICENSE).
 **[MIT](LICENSE)** © 2026 www-moxin-studio-bulk-apikey contributors
 
 </div>
-
----
-
-## ⚠️ Account risk & how to minimise it

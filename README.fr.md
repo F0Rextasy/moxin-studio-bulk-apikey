@@ -1,6 +1,7 @@
 <div align="center">
 
 ```
+
 ███╗   ███╗ ██████╗ ██╗  ██╗██╗███╗   ██╗
 ████╗ ████║██╔═══██╗╚██╗██╔╝██║████╗  ██║
 ██╔████╔██║██║   ██║ ╚███╔╝ ██║██╔██╗ ██║
@@ -21,7 +22,7 @@
 [![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
-[🛠 Démarrage rapide](#-quick-start) · [🎁 Offre gratuite](#-free-tier--how-much-you-get) · [🤖 Modèles](#-models--all-143-of-them) · [🧪 Utiliser l'API](#-how-to-use-the-api) · [✅ Vérifié](#-verified-working--every-key-is-tested) · [🧭 Comment ça marche](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Options](#️-cli-options) · [🛰️ Proxys](#️-behind-a-proxy) · [🐞 Problèmes](#-issues)
+[🛠 Démarrage rapide](#-quick-start) · [🎁 Offre gratuite](#-free-tier--how-much-you-get) · [🤖 Modèles](#-models--all-143-of-them) · [🧪 Utiliser l'API](#-how-to-use-the-api) · [✅ Vérifié](#-verified-working--every-key-is-tested) · [🧭 Comment ça marche](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [🔌 OmniRoute](#-connect-to-omniroute) · [⚙️ Options](#️-cli-options) · [🛰️ Proxys](#️-behind-a-proxy) · [🐞 Problèmes](#-issues)
 
 </div>
 
@@ -43,13 +44,13 @@ Moxin Studio est un fork de new-api (`v1.0.0-rc.45`, `system_name "studio"`) ave
 | --- | --- |
 | Bonus d'inscription | **aucun** — un compte neuf démarre à `quota 0` (mesuré deux fois : compte du 2026-10-18 et comptes neufs d'aujourd'hui) |
 | Check-in quotidien | **aléatoire par compte et par jour, observé entre 12 275 … 79 697 quota (≈ 0,025–0,16 $ ; médiane ~54 000 ≈ 0,11 $)** (`POST /api/user/checkin` → `{"checkin_date":"2026-10-22","quota_awarded":54438}`) ; un second appel le même jour répond `Already checked in today` |
-| Catalogue | 143 lignes, **0 strictement gratuit** (`model_ratio 0` + `model_price 0`) : tout est payant, c'est le crédit du check-in que vous dépensez |
+| Catalogue | 143 lignes, **0 strictement gratuit** (`model_ratio 0` + `model_price 0`) : tout est payant, le crédit du check-in est ce que vous dépensez |
 | Captcha | **aucun** (`turnstile_check=false`) — HTTP simple, pas de navigateur, pas de solveur |
-| E-mail | `email_verification=true`, code valable 10 min ; **seules les adresses de type Gmail** fonctionnent en pratique (le pool gmail public) |
+| E-mail | `email_verification=true`, code valable 10 min ; **seules les adresses de type Gmail** fonctionnent en pratique (le pool Gmail public) |
 | Groupes | `default` (ratio 1) · `DeepSeek[羊毛] 0.35` · `Codex 0.2` · `Claude[特价] 0.6` · `Claude[折扣] 1.2` · `Claude[高质] 2` · `GPT[官方] 5` · `Gemini…` |
 | Débit/expiration | aucune limite publiée par clé ; le crédit du check-in n'expire pas |
 
-> 💡 L'offre gratuite est définie par Moxin Studio et peut changer. Vérifiez les chiffres en direct sur [www.moxin.studio](https://www.moxin.studio) — et laissez la propre barrière de l'outil décider :
+> 💡 L'offre gratuite est définie par Moxin Studio et peut changer. Consultez les chiffres en direct sur [www.moxin.studio](https://www.moxin.studio) — et laissez la barrière de l'outil décider :
 
 ```bash
 node src/cli.js --verify-only     # every key in keys.txt is re-tested with a real chat call
@@ -57,13 +58,13 @@ node src/cli.js --verify-only     # every key in keys.txt is re-tested with a re
 
 ## 🤖 Modèles — les 143
 
-`GET /v1/models` a répondu **108 ids** sur une clé active (2026-10-21). Les ids du catalogue sont étiquetés par groupe (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) et **l'id sans préfixe résout aussi** ; ceux-ci ont été vérifiés par chat de bout en bout :
+`GET /v1/models` a répondu **108 ids** sur une clé active (2026-10-21). Les ids du catalogue sont étiquetés par groupe (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) et l'**id sans préfixe résout aussi** ; ceux-ci ont été vérifiés par chat de bout en bout :
 
 | ID du modèle | note |
 | --- | --- |
 | `deepseek-v4.1-flash` | la valeur par défaut de vérification — 200 `"MX-PONG"` depuis trois sorties indépendantes |
 
-Le flux `/api/pricing` liste 143 lignes : `deepseek-v4-flash`, `gemini-2.5-flash`, `glm-4.6`, `gpt-4o-mini`, `claude-haiku-4-5`, `qwen3.8-flash`, `MiniMax-M3`, `kimi-k3`, `grok-4.6` et plus encore, chacun dans un ou plusieurs des groupes ci-dessus.
+Le flux `/api/pricing` liste 143 lignes : `deepseek-v4-flash`, `gemini-2.5-flash`, `glm-4.6`, `gpt-4o-mini`, `claude-haiku-4-5`, `qwen3.8-flash`, `MiniMax-M3`, `kimi-k3`, `grok-4.6` et d'autres, chacune dans un ou plusieurs des groupes ci-dessus.
 
 ## 🧪 Comment utiliser l'API
 
@@ -78,7 +79,7 @@ curl --fail-with-body https://www.moxin.studio/v1/chat/completions \
 
 ```python
 from openai import OpenAI
-c = OpenAI(base_url="https://www.moxin.studio/v1", api_key="YOUR_KEY")
+c = OpenAI(base_url="https://www.moxin.studio/v1", api_key="<your key>")
 print(c.chat.completions.create(model="deepseek-v4.1-flash",
       messages=[{"role": "user", "content": "hi"}]).choices[0].message.content)
 ```
@@ -108,8 +109,14 @@ Toutes les vérifications ci-dessous ont été relancées le **2026-10-21** depu
 | inscription | **✔** `GET /api/verification?email=<gmail>` 200 → code → `POST /api/user/register {username,password,password2,email,verification_code}` 200 |
 | financement par check-in | **✔** `POST /api/user/checkin` → `{"checkin_date":"2026-10-22","quota_awarded":54438}` ⇒ `quota 0 → 54 438` |
 | clé | **✔** `POST /api/token/` → `GET /api/token/?p=0&size=20` → **`POST /api/token/{id}/key`** révèle la clé complète |
-| chat en direct | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, re-prouvé depuis **trois sorties indépendantes** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
-| échelle | **✔ 10 comptes créés, 10/10 clés répondent à une complétion réelle** (`deepseek-v4.1-flash` → 200 `"ok"`), une sortie par compte ; récompenses de check-in observées : `12 275 … 79 697` quota (≈ 0,025–0,16 $), c'est-à-dire **le crédit quotidien est aléatoire** |
+| chat en direct | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, revérifié depuis **trois sorties indépendantes** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
+| échelle | **✔ 10 comptes créés, chaque clé répond à une complétion réelle** (`deepseek-v4.1-flash` → 200 `"ok"`), une sortie par compte ; récompenses de check-in observées : `12 275 … 79 697` quota (≈ 0,025–0,16 $), c'est-à-dire **le crédit quotidien est aléatoire** |
+
+> **Barrières de qualité.** Chaque clé ici a passé un `chat-200` en direct avant d'être écrite dans `keys.txt`
+> (les clés mortes ne sont jamais livrées). Les combos de routeur suivent la même règle au niveau du modèle : une entrée n'est
+> ajoutée **que si le modèle répond `chat-200` et peut appeler des outils** — un modèle sans support des outils,
+> une clé morte ou un fournisseur mort est écarté au lieu d'être ajouté. Relancez l'étape de vérification à tout moment ;
+> les échecs sont signalés, jamais cachés.
 
 ## 🧭 Comment ça marche
 
@@ -125,10 +132,10 @@ inbox (one address per account)                                  a fresh address
 | Étape | Appel | Notes |
 | --- | --- | --- |
 | boîte mail | pool Gmail public | le panel accepte les adresses de type Gmail ; une boîte **recyclée** peut déjà exister sur le panel (`Email address is already in use`) — le CLI réessaie avec une boîte neuve |
-| code | `GET /api/verification?email=…` puis lire la boîte de réception | ⚠ **le filtre de marque doit porter sur l'EXPÉDITEUR** (`moxin|studio|墨信`) : les boîtes partagées transportent aussi les codes d'autres panels (`OpenArt.ai`, `WhatsToken.AI` …) et un objet générique « verification code » n'est pas une preuve — les deux ont produit `Verification code is incorrect or has expired` avant que le filtre ne soit resserré |
+| code | `GET /api/verification?email=…` puis lire la boîte | ⚠ **le filtre de marque doit se baser sur l'EXPÉDITEUR** (`moxin|studio|墨信`) : les boîtes partagées transportent aussi les codes d'autres panels (`OpenArt.ai`, `WhatsToken.AI` …) et un sujet générique « verification code » n'est pas une preuve — les deux ont produit `Verification code is incorrect or has expired` avant que le filtre ne soit resserré |
 | inscription | `POST /api/user/register {username,password,password2,email,verification_code}` | la réponse peut porter son propre `access_token` ; sinon `POST /api/user/login {username,password}` (nom d'utilisateur ou e-mail, les deux fonctionnent) |
 | financement | `POST /api/user/checkin` | tout l'intérêt : `quota_awarded ≈ 54 438` par compte et par jour |
-| clé | `POST /api/token/` → lister → `POST /api/token/{id}/key` | ce fork masque la clé à chaque lecture, la route `…/{id}/key` la révèle |
+| clé | `POST /api/token/` → liste → `POST /api/token/{id}/key` | ce fork masque la clé à chaque lecture, la route `…/{id}/key` la révèle |
 | barrière | `POST /v1/chat/completions` | une clé n'est écrite dans `keys.txt` qu'après le retour d'un contenu réel |
 
 ## ⚙️ Options CLI
@@ -160,7 +167,7 @@ node public-cli.js --help
 
 ## 🔌 Connexion à 9Router
 
-[9Router](https://9router.com) est un routeur auto-hébergé compatible OpenAI :
+[9Router](https://9router.com) est un routeur auto-hébergé, compatible OpenAI :
 
 ```bash
 node public-cli.js --connect-9router --router9 http://localhost:20128 --password 123456
@@ -170,27 +177,28 @@ Valeurs par défaut : préfixe `moxin-studio`, base `https://www.moxin.studio/v1
 
 ## 🔌 Connexion à OmniRoute
 
-[OmniRoute](https://omniroute.online) est un routeur auto-hébergé compatible OpenAI :
+[OmniRoute](https://omniroute.online) est un routeur auto-hébergé, compatible OpenAI :
 
 ```bash
 node public-cli.js --connect-omniroute --router9 http://localhost:20128 --password 123456
 ```
 
 Valeurs par défaut : préfixe `moxin-studio`, base `https://www.moxin.studio/v1`, modèle `deepseek-v4.1-flash` ; les modèles sont servis sous `moxin-studio/<model id>`.
+
 ## 🔑 Ce qu'une clé vous apporte
 
 | | |
 | --- | --- |
 | 🏢 Fournisseur | **Moxin Studio** — [www.moxin.studio](https://www.moxin.studio) |
-| 🎁 Ce que le fournisseur donne | **aucun bonus d'inscription** — le check-in quotidien paie **≈ 0,109 $ par compte et par jour** |
+| 🎁 Ce que le fournisseur offre | **aucun bonus d'inscription** — le check-in quotidien paie **≈ 0,109 $ par compte et par jour** |
 | 🔑 Ce qu'une clé vous apporte | le catalogue de 143 lignes sur `https://www.moxin.studio/v1` (108 ids visibles sur une clé active) |
-| 📦 Ce dépôt | **10 clés, toutes vérifiées par chat** le 2026-10-21 (une sortie par compte) |
+| 📦 Ce dépôt | **chaque clé, toutes vérifiées par chat** le 2026-10-21 (une sortie par compte) |
 | 🌐 Forme de l'API | compatible OpenAI : `POST https://www.moxin.studio/v1/chat/completions` |
 | 🛡️ Barrières | **aucun captcha**, code e-mail uniquement ; filtre de marque d'expéditeur requis sur les boîtes partagées |
 
 ## 🐞 Problèmes
 
-Si le panel modifie ses routes d'inscription/check-in, sa politique e-mail ou le catalogue, l'outil s'arrête là et le signale. **[Ouvrez un ticket](../../issues)** avec la commande et la sortie exacte.
+Si le panel change ses routes d'inscription/check-in, sa politique e-mail ou le catalogue, l'outil s'arrête là et le signale. **[Ouvrez un ticket](../../issues)** avec la commande et la sortie exacte.
 
 ## 📄 Licence
 
@@ -201,7 +209,3 @@ MIT © 2026 — voir [LICENSE](LICENSE).
 **[MIT](LICENSE)** © 2026 www-moxin-studio-bulk-apikey contributors
 
 </div>
-
----
-
-## ⚠️ Risque de compte et minimisation

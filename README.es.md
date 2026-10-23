@@ -1,6 +1,7 @@
 <div align="center">
 
 ```
+
 ███╗   ███╗ ██████╗ ██╗  ██╗██╗███╗   ██╗
 ████╗ ████║██╔═══██╗╚██╗██╔╝██║████╗  ██║
 ██╔████╔██║██║   ██║ ╚███╔╝ ██║██╔██╗ ██║
@@ -21,7 +22,7 @@
 [![OmniRoute](https://img.shields.io/badge/OmniRoute-connector-8B5CF6?style=for-the-badge)](#-connect-to-omniroute)
 [![X](https://img.shields.io/badge/X-%40bigbullapp-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/bigbullapp)
 
-[🛠 Inicio rápido](#-quick-start) · [🎁 Nivel gratuito](#-free-tier--how-much-you-get) · [🤖 Modelos](#-models--all-143-of-them) · [🧪 Usa la API](#-how-to-use-the-api) · [✅ Verificado](#-verified-working--every-key-is-tested) · [🧭 Cómo funciona](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [⚙️ Opciones](#️-cli-options) · [🛰️ Proxies](#️-behind-a-proxy) · [🐞 Problemas](#-issues)
+[🛠 Inicio rápido](#-quick-start) · [🎁 Nivel gratuito](#-free-tier--how-much-you-get) · [🤖 Modelos](#-models--all-143-of-them) · [🧪 Usa la API](#-how-to-use-the-api) · [✅ Verificado](#-verified-working--every-key-is-tested) · [🧭 Cómo funciona](#-how-it-works) · [🔌 9Router](#-connect-to-9router) · [🔌 OmniRoute](#-connect-to-omniroute) · [⚙️ Opciones](#️-cli-options) · [🛰️ Proxies](#️-behind-a-proxy) · [🐞 Problemas](#-issues)
 
 </div>
 
@@ -35,7 +36,7 @@
 
 ## ✨ Por qué existe esto
 
-Moxin Studio es un fork de new-api (`v1.0.0-rc.45`, `system_name "studio"`) **sin captcha alguno** (`turnstile_check=false`) y con registro mediante código de correo electrónico — pero **sin bono de registro**. Lo que hace que valga la pena tener una cuenta es el **check-in diario**: `POST /api/user/checkin` pagó `{"quota_awarded":54438}` el 2026-10-21 (≈ **$0.109** a `quota_per_unit 500000`), así que una cuenta vale el crédito de un día y sigue pagando si haces check-in a diario. El catálogo detrás es de **143 modelos** (DeepSeek · Gemini · Claude · GPT · GLM · Qwen · MiniMax … como filas etiquetadas por grupo como `[次]deepseek-v4.1-flash`), servidos de forma compatible con OpenAI en `https://www.moxin.studio/v1`. Su host hermano `www.moxin.plus` ("墨信AI", `rc.44`) es una **base de datos separada** — una clave creada aquí responde `Invalid token` allí.
+Moxin Studio es un fork de new-api (`v1.0.0-rc.45`, `system_name "studio"`) **sin captcha alguno** (`turnstile_check=false`) y con registro por código de correo electrónico — pero **sin bono de registro**. Lo que hace que una cuenta valga la pena es el **check-in diario**: `POST /api/user/checkin` pagó `{"quota_awarded":54438}` el 2026-10-21 (≈ **$0.109** con `quota_per_unit 500000`), así que una cuenta vale el crédito de un día y sigue pagando si haces check-in a diario. El catálogo detrás es de **143 modelos** (DeepSeek · Gemini · Claude · GPT · GLM · Qwen · MiniMax … como filas etiquetadas por grupo, por ejemplo `[次]deepseek-v4.1-flash`), servidos de forma compatible con OpenAI en `https://www.moxin.studio/v1`. Su host hermano `www.moxin.plus` ("墨信AI", `rc.44`) es una **base de datos separada** — una clave creada aquí responde `Invalid token` allí.
 
 ## 🎁 Nivel gratuito — cuánto obtienes
 
@@ -57,13 +58,13 @@ node src/cli.js --verify-only     # every key in keys.txt is re-tested with a re
 
 ## 🤖 Modelos — los 143
 
-`GET /v1/models` respondió **108 ids** con una clave en vivo (2026-10-21). Los ids del catálogo están etiquetados por grupo (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) y el **id sin prefijo también resuelve**; estos fueron verificados de extremo a extremo por chat:
+`GET /v1/models` respondió **108 ids** en una clave en vivo (2026-10-21). Los ids del catálogo están etiquetados por grupo (`[次]deepseek-v4.1-flash`, `[官方]gemini-…`, `[vertex特价]gemini-4-argon`) y el **id sin prefijo también resuelve**; estos fueron verificados por chat de extremo a extremo:
 
-| Model ID | nota |
+| ID de modelo | nota |
 | --- | --- |
 | `deepseek-v4.1-flash` | el predeterminado de verificación — 200 `"MX-PONG"` desde tres salidas independientes |
 
-El feed `/api/pricing` lista 143 filas: `deepseek-v4-flash`, `gemini-2.5-flash`, `glm-4.6`, `gpt-4o-mini`, `claude-haiku-4-5`, `qwen3.8-flash`, `MiniMax-M3`, `kimi-k3`, `grok-4.6` y más, cada uno en uno o más de los grupos anteriores.
+El feed `/api/pricing` lista 143 filas: `deepseek-v4-flash`, `gemini-2.5-flash`, `glm-4.6`, `gpt-4o-mini`, `claude-haiku-4-5`, `qwen3.8-flash`, `MiniMax-M3`, `kimi-k3`, `grok-4.6` y más, cada uno en uno o varios de los grupos anteriores.
 
 ## 🧪 Cómo usar la API
 
@@ -78,7 +79,7 @@ curl --fail-with-body https://www.moxin.studio/v1/chat/completions \
 
 ```python
 from openai import OpenAI
-c = OpenAI(base_url="https://www.moxin.studio/v1", api_key="YOUR_KEY")
+c = OpenAI(base_url="https://www.moxin.studio/v1", api_key="<your key>")
 print(c.chat.completions.create(model="deepseek-v4.1-flash",
       messages=[{"role": "user", "content": "hi"}]).choices[0].message.content)
 ```
@@ -98,18 +99,24 @@ Sin navegador, sin solucionador de captcha, sin npm install. `keys.txt` se escri
 
 ### 🖱️ El lanzador
 
-## ✅ Verificado funcionando — cada clave se prueba
+## ✅ Verificado y funcionando — cada clave se prueba
 
 Todas las comprobaciones siguientes se volvieron a ejecutar el **2026-10-21** desde el pool de salidas (sin WARP):
 
 | Comprobación | Resultado |
 | --- | --- |
-| `GET /api/status` | **200** — `register_enabled`+`password_register_enabled` true, `email_verification=true`, **`turnstile_check=false`**, `checkin_enabled=true`, pricing de 143 filas |
+| `GET /api/status` | **200** — `register_enabled`+`password_register_enabled` true, `email_verification=true`, **`turnstile_check=false`**, `checkin_enabled=true`, precios de 143 filas |
 | registro | **✔** `GET /api/verification?email=<gmail>` 200 → código → `POST /api/user/register {username,password,password2,email,verification_code}` 200 |
 | financiación por check-in | **✔** `POST /api/user/checkin` → `{"checkin_date":"2026-10-22","quota_awarded":54438}` ⇒ `quota 0 → 54 438` |
 | clave | **✔** `POST /api/token/` → `GET /api/token/?p=0&size=20` → **`POST /api/token/{id}/key`** revela la clave completa |
-| chat en vivo | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, reprobado desde **tres salidas independientes** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
-| escala | **✔ 10 cuentas creadas, 10/10 claves responden a una completación real** (`deepseek-v4.1-flash` → 200 `"ok"`), una salida por cuenta; premios de check-in vistos: `12 275 … 79 697` quota (≈ $0.025–$0.16), es decir, **el crédito diario es aleatorio** |
+| chat en vivo | **✔** `deepseek-v4.1-flash` → 200 `"MX-PONG"`, re-probado desde **tres salidas independientes** (`http://51.15.20.32:3129`, `socks5://183.106.215.208:1080`, `http://3.224.130.91:3128`) |
+| escala | **✔ 10 cuentas creadas, cada clave responde a una completación real** (`deepseek-v4.1-flash` → 200 `"ok"`), una salida por cuenta; premios de check-in vistos: `12 275 … 79 697` quota (≈ $0.025–$0.16), es decir, **el crédito diario es aleatorio** |
+
+> **Puertas de calidad.** Cada clave aquí pasó un `chat-200` en vivo antes de escribirse en `keys.txt`
+> (las claves muertas nunca se entregan). Las combinaciones del router siguen la misma regla a nivel de modelo: una entrada se
+> añade **solo si el modelo responde `chat-200` y puede llamar a herramientas** — un modelo sin soporte de herramientas,
+> una clave muerta o un proveedor muerto se descarta en lugar de añadirse. Vuelve a ejecutar el paso de verificación cuando quieras;
+> los fallos se reportan, nunca se ocultan.
 
 ## 🧭 Cómo funciona
 
@@ -125,9 +132,9 @@ inbox (one address per account)                                  a fresh address
 | Paso | Llamada | Notas |
 | --- | --- | --- |
 | buzón | pool público de Gmail | el panel acepta direcciones tipo Gmail; un buzón **reciclado** puede existir ya en el panel (`Email address is already in use`) — el CLI reintenta con un buzón nuevo |
-| código | `GET /api/verification?email=…` y luego leer el buzón | ⚠ **el filtro de marca debe basarse en el REMITENTE** (`moxin|studio|墨信`): los buzones compartidos también llevan códigos de otros paneles (`OpenArt.ai`, `WhatsToken.AI` …) y un asunto genérico de "verification code" no es evidencia — ambos produjeron `Verification code is incorrect or has expired` antes de ajustar el filtro |
-| registro | `POST /api/user/register {username,password,password2,email,verification_code}` | la respuesta puede traer su propio `access_token`; si no, `POST /api/user/login {username,password}` (funcionan tanto el nombre de usuario como el correo) |
-| financiar | `POST /api/user/checkin` | el objetivo: `quota_awarded ≈ 54 438` por cuenta y día |
+| código | `GET /api/verification?email=…` y luego leer el buzón | ⚠ **el filtro de marca debe basarse en el REMITENTE** (`moxin|studio|墨信`): los buzones compartidos también llevan códigos de otros paneles (`OpenArt.ai`, `WhatsToken.AI` …) y un asunto genérico de "verification code" no es prueba — ambos produjeron `Verification code is incorrect or has expired` antes de ajustar el filtro |
+| registro | `POST /api/user/register {username,password,password2,email,verification_code}` | la respuesta puede traer su propio `access_token`; si no, `POST /api/user/login {username,password}` (funciona tanto el usuario como el correo) |
+| financiar | `POST /api/user/checkin` | el objetivo de todo: `quota_awarded ≈ 54 438` por cuenta y día |
 | clave | `POST /api/token/` → listar → `POST /api/token/{id}/key` | este fork enmascara la clave en cada lectura, la ruta `…/{id}/key` la revela |
 | puerta | `POST /v1/chat/completions` | una clave se escribe en `keys.txt` solo tras recibir contenido real |
 
@@ -147,7 +154,7 @@ node public-cli.js --help
 
 ## 🛰️ Detrás de un proxy
 
-**Opcional.** `--pool <file>` (o `MOXIN_STUDIO_PROXIES`) acepta una salida por línea — `http://host:port`, `https://host:port` (CONNECT) o `socks5://host:port` (con `user:pass@` opcional) — y el CLI toma una salida por cuenta; sin un pool se ejecuta directo. La plomería integrada son ~80 líneas de `net`/`tls`, sin librería.
+**Opcional.** `--pool <file>` (o `MOXIN_STUDIO_PROXIES`) acepta una salida por línea — `http://host:port`, `https://host:port` (CONNECT) o `socks5://host:port` (con `user:pass@` opcional) — y el CLI toma una salida por cuenta; sin pool se ejecuta directo. La plomería integrada son ~80 líneas de `net`/`tls`, sin librería.
 
 ## 📄 Archivos
 
@@ -177,14 +184,15 @@ node public-cli.js --connect-omniroute --router9 http://localhost:20128 --passwo
 ```
 
 Valores predeterminados: prefijo `moxin-studio`, base `https://www.moxin.studio/v1`, modelo `deepseek-v4.1-flash`; los modelos se sirven como `moxin-studio/<model id>`.
+
 ## 🔑 Qué te da una clave
 
 | | |
 | --- | --- |
 | 🏢 Proveedor | **Moxin Studio** — [www.moxin.studio](https://www.moxin.studio) |
 | 🎁 Qué da el proveedor | **sin bono de registro** — el check-in diario paga **≈$0.109 por cuenta y día** |
-| 🔑 Qué te da una clave | el catálogo de 143 filas en `https://www.moxin.studio/v1` (108 ids visibles con una clave en vivo) |
-| 📦 Este repo | **10 claves, todas verificadas por chat** el 2026-10-21 (una salida por cuenta) |
+| 🔑 Qué te da una clave | el catálogo de 143 filas en `https://www.moxin.studio/v1` (108 ids visibles en una clave en vivo) |
+| 📦 Este repositorio | **cada clave, todas verificadas por chat** el 2026-10-21 (una salida por cuenta) |
 | 🌐 Forma de la API | compatible con OpenAI: `POST https://www.moxin.studio/v1/chat/completions` |
 | 🛡️ Puertas | **sin captcha**, solo código de correo; se requiere filtro de marca del remitente en los buzones compartidos |
 
@@ -201,7 +209,3 @@ MIT © 2026 — consulta [LICENSE](LICENSE).
 **[MIT](LICENSE)** © 2026 www-moxin-studio-bulk-apikey contributors
 
 </div>
-
----
-
-## ⚠️ Riesgo de cuenta y cómo minimizarlo
