@@ -28,6 +28,21 @@ const HERE = __dirname;
 const BASE = (process.env.MOXIN_BASE || 'https://www.moxin.studio').replace(/\/$/, '');
 const KEYS = path.join(HERE, 'keys.txt');
 const ACCOUNTS = path.join(HERE, 'accounts.jsonl');
+
+/** Dead-key report: only definite rejections — 429/5xx/transport never land here. */
+const DEAD_FILE = path.join(HERE, 'keys-dead.txt');
+const DEAD_STATUS = new Set([401, 403]);
+const DEAD_REASON = /banned|deactivated|disabled|suspended|quota|insufficient|forbidden|unauthorized/i;
+function recordDead(key, status, sample) {
+  if (!key) return;
+  if (!DEAD_STATUS.has(Number(status)) && !DEAD_REASON.test(String(sample || ''))) return;
+  const why = `${status}${sample ? ' ' + String(sample).replace(/\s+/g, ' ').slice(0, 60) : ''}`;
+  try {
+    fs.mkdirSync(path.dirname(DEAD_FILE), { recursive: true });
+    fs.appendFileSync(DEAD_FILE, `${key}\t${why}\t${new Date().toISOString()}\n`);
+  } catch (e) { /* diagnostics must never break the run */ }
+}
+
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
 const MAILBOX_API = 'https://www.emailnator.com';
 
@@ -132,24 +147,29 @@ async function req(method, url, { body, headers = {}, exit = null } = {}) {
     });
   }
   const sock = await openTunnel(proxy, u.hostname, u.port || (u.protocol === 'https:' ? 443 : 80));
+  // Hand-parsing the raw tunnel corrupted chunked bodies (measured 2026-10-24:
+  // chunk-size lines landed *inside* the JSON and the body capped at 4096 bytes, so
+  // every `/api/message-list` parse threw and the shared box read as empty while the
+  // mail was sitting in it). Node's own client over the same tunnel frames it right —
+  // the hand framing is deleted, not patched.
+  const secure = u.protocol === 'https:'
+    ? await new Promise((res, rej) => { const t = tls.connect({ socket: sock, servername: u.hostname }, () => res(t)); t.on('error', rej); })
+    : sock;
   return new Promise((resolve, reject) => {
-    const onSock = (s) => {
-      s.write(`${method} ${u.pathname}${u.search} HTTP/1.1\r\nHost: ${u.hostname}\r\nConnection: close\r\n${Object.entries(baseHeaders).map(([k, v]) => `${k}: ${v}`).join('\r\n')}\r\n\r\n`);
-      if (payload) s.write(payload);
-      let t = '';
-      s.setEncoding('utf8');
-      s.on('data', (c) => { t += c; });
-      s.on('end', () => {
-        const idx = t.indexOf('\r\n\r\n');
-        const head = idx === -1 ? t : t.slice(0, idx);
-        const bodyText = idx === -1 ? '' : t.slice(idx + 4);
-        const status = Number((/^HTTP\/1\.[01] (\d+)/.exec(head) || [])[1] || 0);
-        resolve({ status, text: bodyText });
-      });
-      s.on('error', reject);
-    };
-    if (u.protocol === 'https:') { const t = tls.connect({ socket: sock, servername: u.hostname }, () => onSock(t)); t.on('error', reject); }
-    else onSock(sock);
+    const mod = u.protocol === 'https:' ? https : http;
+    const r = mod.request(
+      { method, host: u.hostname, port: u.port || (u.protocol === 'https:' ? 443 : 80), path: u.pathname + u.search, headers: baseHeaders, createConnection: () => secure, timeout: TIMEOUT_MS },
+      (res) => {
+        let t = '';
+        res.setEncoding('utf8');
+        res.on('data', (c) => { t += c; });
+        res.on('end', () => resolve({ status: res.statusCode, text: t }));
+      }
+    );
+    r.on('timeout', () => r.destroy(new Error('timeout ' + u.hostname)));
+    r.on('error', reject);
+    if (payload) r.write(payload);
+    r.end();
   });
 }
 async function api(method, p, opts = {}) {
@@ -169,7 +189,7 @@ async function newGmail(exit) {
 async function inbox(address, exit) {
   // emailnator: POST /api/message-list {email,limit} -> json.messages[]; GET /api/message/<id> -> json.content
   const r = await req('POST', `${MAILBOX_API}/api/message-list`, { body: { email: address, limit: 20 }, exit });
-  let j = null; try { j = JSON.parse(r.text); } catch { return []; }
+  let j = null; try { j = JSON.parse(r.text); } catch { throw new Error('message-list: ' + r.text.slice(0, 80)); }
   const rows = j.messages || [];
   const out = [];
   for (const m of rows.slice(0, 10)) {
@@ -179,9 +199,22 @@ async function inbox(address, exit) {
       const jd = JSON.parse(d.text);
       body = String(jd.content || jd.html || jd.text || body);
     } catch { /* keep the preview */ }
-    out.push({ from: m.from || '', subject: m.subject || '', body });
+    out.push({ id: String(m.id || ''), from: m.from || '', subject: m.subject || '', body });
   }
   return out;
+}
+/**
+ * Ids already in the box, taken BEFORE the code is asked for. The gmail pool is
+ * shared and recycled: a mail that was already there belongs to another tenant
+ * (a stale code submitted this way answered `Verification code is incorrect or
+ * has expired`). A failed snapshot is not an empty box — it throws.
+ */
+async function snapshotIds(address, exit) {
+  let last = null;
+  for (let k = 0; k < 5; k++) {
+    try { return new Set((await inbox(address, exit)).map((m) => m.id).filter(Boolean)); } catch (e) { last = e; await sleep(4000); }
+  }
+  throw new Error(`inbox snapshot failed: ${String((last && last.message) || last).slice(0, 90)}`);
 }
 
 /** the brand filter that took two lanes to learn: match the SENDER (a recycled box carries other panels' mail) */
@@ -200,6 +233,7 @@ async function mintOne(idx) {
     try { email = await newGmail(nextExit()); } catch (e) { log(`#${idx} mailbox ${k}: ${String(e.message).slice(0, 60)}`); }
   }
   if (!email) throw new Error('no mailbox');
+  const baseline = await snapshotIds(email, exit);
   const sent = await api('GET', `/api/verification?email=${encodeURIComponent(email)}`, { exit });
   log(`#${idx} send-code`, sent.text.replace(/\s+/g, ' ').slice(0, 90));
   if (!(sent.json && sent.json.success)) {
@@ -212,7 +246,7 @@ async function mintOne(idx) {
   while (Date.now() - t0 < CODE_WAIT_MS && !code) {
     await sleep(8000);
     try {
-      for (const m of await inbox(email, exit)) if (OURS(m)) { const c = codeOf(`${m.subject} ${m.body}`); if (c) { code = c; break; } }
+      for (const m of await inbox(email, exit)) if (!baseline.has(m.id) && OURS(m)) { const c = codeOf(`${m.subject} ${m.body}`); if (c) { code = c; break; } }
     } catch { /* keep polling */ }
   }
   if (!code) throw new Error('no code mail (sender-brand filter: moxin|studio|墨信)');
@@ -288,6 +322,7 @@ async function verifyKeys() {
     });
     const content = c.json && c.json.choices && c.json.choices[0] && (c.json.choices[0].message?.content || c.json.choices[0].text);
     if (content) live++;
+    else recordDead(key, c.status, c.text);
     log(`verify ${key.slice(0, 12)}… models=${ids.length} chat=${content ? '200 ' + JSON.stringify(String(content).slice(0, 20)) : c.text.replace(/\s+/g, ' ').slice(0, 80)}`);
   }
   log(`verify done: ${live}/${keys.length} live`);
